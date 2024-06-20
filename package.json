@@ -1,15 +1,15 @@
 {
-  "name": "baybayin",
+  "name": "monkey-ts",
   "version": "1.0.0",
-  "main": "dist/app.js",
+  "main": "out/src/app.js",
   "scripts": {
-    "build:compile:source": "npx babel src --extensions '.ts' --out-dir lib/src",
-    "build:compile:test": "npx babel test --extensions '.ts' --out-dir lib/test",
+    "build:compile:source": "npx babel src --extensions '.ts' --out-dir out/src",
+    "build:compile:test": "npx babel test --extensions '.ts' --out-dir out/test",
     "build:compile": "npm run build:compile:source && npm run build:compile:test",
     "build:types": "tsc",
     "build": "npm run build:compile && npm run build:types",
-    "test": "npm run build && jest lib/test",
-    "start": "npm run build && node 'lib/src/app.js'"
+    "test": "npm run build && jest out/test",
+    "start": "npm run build && node 'out/src/app.js'"
   },
   "author": "",
   "license": "ISC",

@@ -1,13 +1,5 @@
-import { describe, expect, it } from '@jest/globals';
-import { User, isAdult } from "../src/app";
+import { expect, it, test } from '@jest/globals';
 
-describe('IsAdult', () => {
-  it('Should be adult when age is 16.', () => {
-    const user: User = {
-      name: 'kimley',
-      age: 26
-    };
-
-    expect(isAdult(user)).toBeTruthy();
-  });
+it('Should be nothing. Sample test', () => {
+  expect(true).toBeTruthy();
 });

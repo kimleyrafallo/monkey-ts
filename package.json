@@ -1,5 +1,5 @@
 {
-  "name": "monkey-ts",
+  "name": "baybayin",
   "version": "1.0.0",
   "main": ".dist/app.js",
   "scripts": {
@@ -11,6 +11,9 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@babel/cli": "^7.24.7",
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }

@@ -1,19 +1,28 @@
 {
   "name": "baybayin",
   "version": "1.0.0",
-  "main": ".dist/app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node '.dist/app.js'"
+    "build:compile:source": "npx babel src --extensions '.ts' --out-dir lib/src",
+    "build:compile:test": "npx babel test --extensions '.ts' --out-dir lib/test",
+    "build:compile": "npm run build:compile:source && npm run build:compile:test",
+    "build:types": "tsc",
+    "build": "npm run build:compile && npm run build:types",
+    "test": "npm run build && jest lib/test",
+    "start": "npm run build && node 'lib/src/app.js'"
   },
   "author": "",
   "license": "ISC",
   "description": "",
+  "type": "commonjs",
   "devDependencies": {
     "@babel/cli": "^7.24.7",
     "@babel/core": "^7.24.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
+    "@jest/globals": "^29.7.0",
+    "jest": "^29.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }

@@ -1,9 +1,9 @@
-type User = {
+export type User = {
   name: string;
   age: number;
 }
 
-function isAdult(user: User): boolean {
+export function isAdult(user: User): boolean {
   return user.age >= 18;
 }
 

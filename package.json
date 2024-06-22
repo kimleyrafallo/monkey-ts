@@ -8,7 +8,7 @@
     "build:compile": "npm run build:compile:source && npm run build:compile:test",
     "build:types": "tsc",
     "build": "npm run build:compile && npm run build:types",
-    "test": "npm run build && jest out/test",
+    "test": "npm run build && jest --verbose out/test",
     "start": "npm run build && node 'out/src/app.js'"
   },
   "author": "",

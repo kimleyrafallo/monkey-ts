@@ -1,4 +1,4 @@
-import { describe, expect, it, test } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { Token } from '../../src/token/Token';
 import { TokenType } from '../../src/token/TokenType';
 import { Tokenizer } from '../../src/tokenizer/Tokenizer';

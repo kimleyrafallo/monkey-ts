@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "out/src/app.js",
   "scripts": {
-    "build:compile:source": "npx babel src --extensions '.ts' --out-dir out/src",
-    "build:compile:test": "npx babel test --extensions '.ts' --out-dir out/test",
+    "build:compile:source": "npx babel src --extensions '.ts' --out-dir out/src --delete-dir-on-start",
+    "build:compile:test": "npx babel test --extensions '.ts' --out-dir out/test --delete-dir-on-start",
     "build:compile": "npm run build:compile:source && npm run build:compile:test",
     "build:types": "tsc",
     "build": "npm run build:compile && npm run build:types",
@@ -21,7 +21,9 @@
     "@babel/plugin-transform-modules-commonjs": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
+    "@babel/runtime-corejs3": "^7.24.7",
     "@jest/globals": "^29.7.0",
+    "core-js": "^3.37.1",
     "jest": "^29.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"

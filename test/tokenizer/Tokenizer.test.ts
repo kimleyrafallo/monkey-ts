@@ -65,3 +65,35 @@ describe('Test nextToken for input =+(){},;', () => {
     });
   }
 });
+
+describe('Test Non-single character of Tokenizer.', () => {
+  const input = `
+x != 3;
+y == 5;
+`;
+  
+  const expectedTokens = [
+    new Token(TokenType.IDENTIFIER, 'x', 1, 2),
+    new Token(TokenType.NOTEQ, '!=', 3, 2),
+    new Token(TokenType.INT, '3', 6, 2),
+    new Token(TokenType.SEMICOLON, ';', 7, 2),
+
+    new Token(TokenType.IDENTIFIER, 'y', 1, 3),
+    new Token(TokenType.EQ, '==', 3, 3),
+    new Token(TokenType.INT, '5', 6, 3),
+    new Token(TokenType.SEMICOLON, ';', 7, 3),
+
+    new Token(TokenType.EOF, null, 1, 4)
+  ];
+  
+  let tokenizer = new Tokenizer(input);
+
+  for (let i = 0; i < expectedTokens.length; i++) {
+    const expectedToken = expectedTokens[i];
+    const nextToken = tokenizer.nextToken();
+
+    it(`Token should be ${expectedToken.stringify()}`, () => {
+      expect(nextToken).toEqual(expectedToken);
+    });
+  }
+});

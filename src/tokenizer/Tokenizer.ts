@@ -34,7 +34,15 @@ export class Tokenizer {
 
     switch (this.ch) {
       case '=':
-        token = new Token(TokenType.ASSIGN, this.ch, this.getLineNumber(), this.columnPointer);
+        if (this.peekChar() == '=') {
+          let literal = this.ch;
+          this.readChar();
+          literal += this.ch;
+          token = new Token(TokenType.EQ, literal, this.getLineNumber() - 1, this.columnPointer);
+        } else {
+          token = new Token(TokenType.ASSIGN, this.ch, this.getLineNumber(), this.columnPointer);
+        }
+
         break;
 
       case '+':
@@ -84,6 +92,18 @@ export class Tokenizer {
       case '<':
         token = new Token(TokenType.LT, this.ch, this.getLineNumber(), this.columnPointer);
         break;
+      
+      case '!':
+        if (this.peekChar() == '=') {
+          let literal = this.ch;
+          this.readChar();
+          literal += this.ch;
+          token = new Token(TokenType.NOTEQ, literal, this.getLineNumber() - 1, this.columnPointer);
+        } else {
+          token = new Token(TokenType.BANG, this.ch, this.getLineNumber(), this.columnPointer);
+        }
+
+        break;
 
       case "":
         token = new Token(TokenType.EOF, null, this.getLineNumber(), this.columnPointer);
@@ -129,6 +149,14 @@ export class Tokenizer {
     this.currentPosition = this.peekPosition;
     this.linePointer++;
     this.peekPosition++;
+  }
+
+  private peekChar(): string | null {
+    if (this.peekPosition > this.input.length) {
+      return null;
+    }
+
+    return this.input.charAt(this.peekPosition);
   }
   
   private readWord(): string {

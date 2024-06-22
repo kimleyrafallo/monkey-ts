@@ -7,8 +7,6 @@ describe('Test column functionality of Tokenizer.', () => {
   const input: string = `=+
 ();`;
 
-  console.warn(`INPUT LENGTH: ${input.length}`);
-
   const expectedNextTokens: Array<Token> = [
     new Token(TokenType.ASSIGN, '=', 1, 1),
     new Token(TokenType.PLUS, '+', 2, 1),

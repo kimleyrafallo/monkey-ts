@@ -6,7 +6,7 @@ export class Token {
   line: number;
   column: number;
 
-  constructor (tokenType: TokenType, literal: string | null, line: number, column: number){
+  constructor (tokenType: TokenType, literal: string | null, column: number, line: number){
     this.tokenType = tokenType;
     this.literal = literal;
     this.line = line;

@@ -9,8 +9,8 @@ export class Tokenizer {
   private currentPosition: number;
   private peekPosition: number;
   private ch: string | null;
-  private columnPointer: number;
-  private linePointer: number;
+  private line: number;
+  private column: number;
   private errors: Array<TokenizerError>;
 
   constructor(input: string){
@@ -18,15 +18,15 @@ export class Tokenizer {
     this.peekPosition = 0;
     this.currentPosition = 0;
     this.ch = null;
-    this.columnPointer = 1;
-    this.linePointer = 0;
+    this.line = 1;
+    this.column = 0;
     this.errors = [];
 
     this.readChar();
   }
 
   public nextToken(): Token {
-    console.log(`Start tokenizing character: ${this.ch}, line: ${this.peekPosition}, column: ${this.columnPointer}.`);
+    console.log(`Start tokenizing character: ${this.ch}, line: ${this.line}, column: ${this.column}.`);
     let token: Token;
     let error: TokenizerError | null = null;
 
@@ -38,59 +38,59 @@ export class Tokenizer {
           let literal = this.ch;
           this.readChar();
           literal += this.ch;
-          token = new Token(TokenType.EQ, literal, this.getLineNumber() - 1, this.columnPointer);
+          token = new Token(TokenType.EQ, literal, this.getColumn() - 1, this.line);
         } else {
-          token = new Token(TokenType.ASSIGN, this.ch, this.getLineNumber(), this.columnPointer);
+          token = new Token(TokenType.ASSIGN, this.ch, this.getColumn(), this.line);
         }
 
         break;
 
       case '+':
-        token = new Token(TokenType.PLUS, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.PLUS, this.ch, this.getColumn(), this.line);
         break;
 
       case '-':
-        token = new Token(TokenType.MINUS, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.MINUS, this.ch, this.getColumn(), this.line);
         break;
 
       case '*':
-        token = new Token(TokenType.ASTERISK, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.ASTERISK, this.ch, this.getColumn(), this.line);
         break;
 
       case '/':
-        token = new Token(TokenType.SLASH, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.SLASH, this.ch, this.getColumn(), this.line);
         break;
 
       case ',':
-        token = new Token(TokenType.COMMA, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.COMMA, this.ch, this.getColumn(), this.line);
         break;
 
       case ';':
-        token = new Token(TokenType.SEMICOLON, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.SEMICOLON, this.ch, this.getColumn(), this.line);
         break;
 
       case '(':
-        token = new Token(TokenType.LPAREN, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.LPAREN, this.ch, this.getColumn(), this.line);
         break;
 
       case ')':
-        token = new Token(TokenType.RPAREN, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.RPAREN, this.ch, this.getColumn(), this.line);
         break;
 
       case '{':
-        token = new Token(TokenType.LBRACE, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.LBRACE, this.ch, this.getColumn(), this.line);
         break;
 
       case '}':
-        token = new Token(TokenType.RBRACE, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.RBRACE, this.ch, this.getColumn(), this.line);
         break;
 
       case '>':
-        token = new Token(TokenType.GT, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.GT, this.ch, this.getColumn(), this.line);
         break;
 
       case '<':
-        token = new Token(TokenType.LT, this.ch, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.LT, this.ch, this.getColumn(), this.line);
         break;
       
       case '!':
@@ -98,32 +98,32 @@ export class Tokenizer {
           let literal = this.ch;
           this.readChar();
           literal += this.ch;
-          token = new Token(TokenType.NOTEQ, literal, this.getLineNumber() - 1, this.columnPointer);
+          token = new Token(TokenType.NOTEQ, literal, this.getColumn() - 1, this.line);
         } else {
-          token = new Token(TokenType.BANG, this.ch, this.getLineNumber(), this.columnPointer);
+          token = new Token(TokenType.BANG, this.ch, this.getColumn(), this.line);
         }
 
         break;
 
       case "":
-        token = new Token(TokenType.EOF, null, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.EOF, null, this.getColumn(), this.line);
         break;
       
       case null:
-        token = new Token(TokenType.EOF, null, this.getLineNumber(), this.columnPointer);
+        token = new Token(TokenType.EOF, null, this.getColumn(), this.line);
         break;
 
       default:
         if (this.isLetter(this.ch)) {
           const word = this.readWord();
           const tokenType = this.getTokenTypeOfIdentifier(word);
-          return new Token(tokenType, word, this.getLineNumber() - word.length, this.columnPointer);
+          return new Token(tokenType, word, this.getColumn() - word.length, this.line);
         } else if (this.isDigit(this.ch)) {
           const number = this.readNumber();
-          return new Token(TokenType.INT, number, this.getLineNumber() - number.length, this.columnPointer);
+          return new Token(TokenType.INT, number, this.getColumn() - number.length, this.line);
         } else {
-          error = new TokenizerError(`Illegal character: ${this.ch}`, this.getLineNumber(), this.columnPointer);
-          token = new Token(TokenType.ILLEGAL, this.ch, this.getLineNumber(), this.columnPointer);
+          error = new TokenizerError(`Illegal character: ${this.ch}`, this.getColumn(), this.line);
+          token = new Token(TokenType.ILLEGAL, this.ch, this.getColumn(), this.line);
           this.errors.push(error);
         }
 
@@ -147,7 +147,7 @@ export class Tokenizer {
     }
 
     this.currentPosition = this.peekPosition;
-    this.linePointer++;
+    this.column++;
     this.peekPosition++;
   }
 
@@ -239,8 +239,8 @@ export class Tokenizer {
 
     while (isNextLine || isWhitespace) {
       if (isNextLine){
-        this.columnPointer++;
-        this.resetLinePointer();
+        this.line++;
+        this.resetColumn();
       }
       
       this.readChar();
@@ -253,11 +253,11 @@ export class Tokenizer {
     return this.errors;
   }
 
-  private getLineNumber(): number {
-    return this.linePointer;
+  private getColumn(): number {
+    return this.column;
   }
   
-  private resetLinePointer(): void {
-    this.linePointer = 0;
+  private resetColumn(): void {
+    this.column = 0;
   }
 }

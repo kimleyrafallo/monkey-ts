@@ -8,7 +8,7 @@ describe('Test Identifier and Keywords.', () => {
 let x = 3;
 let y = 5 - x;
 
-function hello(x) {
+function hello(x, y) {
   return x;
 }
 
@@ -38,8 +38,10 @@ y < 4;
     new Token(TokenType.IDENTIFIER, 'hello', 10, 5),
     new Token(TokenType.LPAREN, '(', 15, 5),
     new Token(TokenType.IDENTIFIER, 'x', 16, 5),
-    new Token(TokenType.RPAREN, ')', 17, 5),
-    new Token(TokenType.LBRACE, '{', 19, 5),
+    new Token(TokenType.COMMA, ',', 17, 5),
+    new Token(TokenType.IDENTIFIER, 'y', 19, 5),
+    new Token(TokenType.RPAREN, ')', 20, 5),
+    new Token(TokenType.LBRACE, '{', 22, 5),
 
     new Token(TokenType.RETURN, 'return', 3, 6),
     new Token(TokenType.IDENTIFIER, 'x', 10, 6),

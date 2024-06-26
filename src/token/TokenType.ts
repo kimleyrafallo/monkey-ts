@@ -4,6 +4,7 @@ export enum TokenType {
   
   IDENTIFIER = 'IDENTIFIER',
   INT = 'INT',
+  STRING = 'STRING',
 
   FUNCTION = 'FUNCTION',
   LET = 'LET',

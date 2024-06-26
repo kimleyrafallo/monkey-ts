@@ -1,7 +1,7 @@
 import { Keyword, getKeywordTokenType } from "../token/Keyword";
 import { Token } from "../token/Token";
 import { TokenType } from "../token/TokenType";
-import { TokenizerError } from "./TokenizerError";
+import { Error } from "./TokenizerError";
 
 export class Tokenizer {
   
@@ -11,7 +11,7 @@ export class Tokenizer {
   private ch: string | null;
   private line: number;
   private column: number;
-  private errors: Array<TokenizerError>;
+  private errors: Array<Error>;
 
   constructor(input: string){
     this.input = input;
@@ -28,7 +28,7 @@ export class Tokenizer {
   public nextToken(): Token {
     console.log(`Start tokenizing character: ${this.ch}, line: ${this.line}, column: ${this.column}.`);
     let token: Token;
-    let error: TokenizerError | null = null;
+    let error: Error | null = null;
 
     this.skipWhitespace();
 
@@ -59,6 +59,12 @@ export class Tokenizer {
 
       case '/':
         token = new Token(TokenType.SLASH, this.ch, this.getColumn(), this.line);
+        break;
+
+      case '\'':
+        this.readChar();
+        let stringLiteral = this.readString();
+        token = new Token(TokenType.STRING, stringLiteral, this.getColumn() - (stringLiteral.length + 1), this.line);
         break;
 
       case ',':
@@ -122,7 +128,7 @@ export class Tokenizer {
           const number = this.readNumber();
           return new Token(TokenType.INT, number, this.getColumn() - number.length, this.line);
         } else {
-          error = new TokenizerError(`Illegal character: ${this.ch}`, this.getColumn(), this.line);
+          error = new Error(`Illegal character: ${this.ch}`, this.getColumn(), this.line);
           token = new Token(TokenType.ILLEGAL, this.ch, this.getColumn(), this.line);
           this.errors.push(error);
         }
@@ -157,6 +163,17 @@ export class Tokenizer {
     }
 
     return this.input.charAt(this.peekPosition);
+  }
+  
+  private readString(): string {
+    let stringStartPointer = this.currentPosition;
+
+    while (this.ch != '\'') {
+      console.log(`Ch: ${this.ch}`);
+      this.nextToken();
+    }
+
+    return this.input.substring(stringStartPointer, this.currentPosition);
   }
   
   private readWord(): string {
@@ -249,7 +266,7 @@ export class Tokenizer {
     }
   }
 
-  public getErrors(): Array<TokenizerError> {
+  public getErrors(): Array<Error> {
     return this.errors;
   }
 

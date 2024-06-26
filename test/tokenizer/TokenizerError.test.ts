@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { Token } from '../../src/token/Token';
 import { TokenType } from '../../src/token/TokenType';
-import { TokenizerError } from '../../src/tokenizer/TokenizerError';
+import { Error } from '../../src/tokenizer/TokenizerError';
 import { Tokenizer } from '../../src/tokenizer/Tokenizer';
 
 describe('Test Tokenizer Error: Illegal Character.', () => {
@@ -17,8 +17,8 @@ describe('Test Tokenizer Error: Illegal Character.', () => {
   ];
 
   const expectedErrors = [
-    new TokenizerError('Illegal character: #', 3, 1),
-    new TokenizerError('Illegal character: @', 4, 1)
+    new Error('Illegal character: #', 3, 1),
+    new Error('Illegal character: @', 4, 1)
   ];
   
 

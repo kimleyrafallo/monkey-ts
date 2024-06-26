@@ -1,10 +1,10 @@
-export class TokenizerError {
+export class Error {
 
   message: string;
   line: number;
   column: number;
 
-  constructor (message: string, line: number, column: number) {
+  constructor (message: string, column: number, line: number) {
     this.message = message;
     this.line = line;
     this.column = column;

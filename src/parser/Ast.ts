@@ -47,7 +47,7 @@ export class LetStatement implements Statement {
   }
 
   public stringify(): string {
-    return `${this.tokenliteral()} ${this.identifier}, ${this.expression.stringify()}`;
+    return `${this.tokenliteral()} ${this.identifier.stringify()} = ${this.expression.stringify()}`;
   }
 }
 

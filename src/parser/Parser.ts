@@ -12,6 +12,7 @@ export class Parser {
   // unnecessary checking for currentToken
   // as currentToken is initialized when 
   // advanceToken() was called in the constructor
+  // Initial value = null
   private currentToken: Token;
 
   // @ts-ignore
@@ -19,6 +20,7 @@ export class Parser {
   // unnecessary checking for peekToken
   // as peekToken is initialized when 
   // advanceToken() was called in the constructor
+  // Initial value = null
   private peekToken: Token;
   private errors: Array<Error> = [];
 
@@ -58,32 +60,41 @@ export class Parser {
       default:
         let message = `Invalid token: ${this.currentToken.stringify()}`;
         this.addError(new Error(message, this.currentToken.column, this.currentToken.line));
-        throw message;
+        return null;
     };
   }
   
   private parseIdentifier() {
+    console.info('Start parsing Identifier Expression');
+    console.info('End parsing Identifier Expression');
     return new Identifier(this.currentToken, `${this.currentToken.literal}`);
   }
 
   private parseLetStatement() {
     console.info('Start parsing Let Statement');
-    this.advanceToken(); // Advance token to get Identifier
+    const letToken = this.currentToken;
 
-    if (!this.isCurrentToken(TokenType.IDENTIFIER)) {
-      return null;
-    }
+    this.advanceToken(); // Advance token to get Identifier
+    const identifierToken = this.parseIdentifier();
+
+    //if (!this.isCurrentToken(TokenType.IDENTIFIER)) {
+    //  this.addError(new Error(`Expecting and Identifier. Got ${this.currentToken.tokenType}`,
+    //                          this.currentToken.column, this.currentToken.line));
+    //  return null;
+    //}
 
     // TODO: Handler for when expression is passed instead of identifier
     // Currently, LetStatement() can only handle identifiers
 
     console.info('End parsing Let Statement');
-    return new LetStatement(this.currentToken, this.parseIdentifier(), new Expression());
+    return new LetStatement(letToken, identifierToken, new Expression());
   }
   
   private advanceToken(): void {
     this.currentToken = this.peekToken;
     this.peekToken = this.tokenizer.nextToken();
+    console.log(`currentToken: ${JSON.stringify(this.currentToken)}`);
+    console.log(`peekToken: ${JSON.stringify(this.peekToken)}`);
   }
 
   private isCurrentToken(tokenType: TokenType): boolean {

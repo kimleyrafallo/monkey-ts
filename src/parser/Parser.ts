@@ -11,7 +11,7 @@ export class Parser {
   // Ignoring for cleaner code and preventing adding 
   // unnecessary checking for currentToken
   // as currentToken is initialized when 
-  // advanceToken() was called in the constructor
+  // nextToken() was called in the constructor
   // Initial value = null
   private currentToken: Token;
 
@@ -19,15 +19,15 @@ export class Parser {
   // Ignoring for cleaner code and preventing adding 
   // unnecessary checking for peekToken
   // as peekToken is initialized when 
-  // advanceToken() was called in the constructor
+  // nextToken() was called in the constructor
   // Initial value = null
   private peekToken: Token;
   private errors: Array<Error> = [];
 
   constructor(tokenizer: Tokenizer){
     this.tokenizer = tokenizer;
-    this.advanceToken();
-    this.advanceToken();
+    this.nextToken();
+    this.nextToken();
   }
 
   public parse(): Array<Statement> {
@@ -46,7 +46,7 @@ export class Parser {
 
       console.warn('Statement is null.');
 
-      this.advanceToken();
+      this.nextToken();
     }
 
     return program.getStatement();
@@ -74,7 +74,7 @@ export class Parser {
     console.info('Start parsing Let Statement');
     const letToken = this.currentToken;
 
-    this.advanceToken(); // Advance token to get Identifier
+    this.nextToken(); // Advance token to get Identifier
     const identifierToken = this.parseIdentifier();
 
     //if (!this.isCurrentToken(TokenType.IDENTIFIER)) {
@@ -90,11 +90,9 @@ export class Parser {
     return new LetStatement(letToken, identifierToken, new Expression());
   }
   
-  private advanceToken(): void {
+  private nextToken(): void {
     this.currentToken = this.peekToken;
     this.peekToken = this.tokenizer.nextToken();
-    console.log(`currentToken: ${JSON.stringify(this.currentToken)}`);
-    console.log(`peekToken: ${JSON.stringify(this.peekToken)}`);
   }
 
   private isCurrentToken(tokenType: TokenType): boolean {
